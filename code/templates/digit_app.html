@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔢 Handschriften-Ziffer Erkennung - Deep Learning</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 40px;
+            max-width: 900px;
+            width: 100%;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 32px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 16px;
+        }
+
+        .canvas-section {
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .canvas-label {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        #drawingCanvas {
+            border: 3px solid #667eea;
+            border-radius: 10px;
+            cursor: crosshair;
+            display: block;
+            margin: 0 auto;
+            background-color: white;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            touch-action: none;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin: 30px 0;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 140px;
+        }
+
+        .btn-predict {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .btn-predict:hover {
+            background-color: #45a049;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+        }
+
+        .btn-clear {
+            background-color: #FF9800;
+            color: white;
+        }
+
+        .btn-clear:hover {
+            background-color: #e68900;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 152, 0, 0.3);
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .result-section {
+            background: #f5f5f5;
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .result-label {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .result-row {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 30px;
+            width: 100%;
+            flex-wrap: nowrap;
+        }
+
+        .result-section {
+            flex: 0 0 250px;
+        }
+
+        .probabilities {
+            flex: 1;
+            margin-top: 0;
+        }
+
+        .digit-display {
+            font-size: 120px;
+            font-weight: bold;
+            color: #667eea;
+            min-height: 140px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .digit-display.waiting {
+            color: #ccc;
+            font-size: 80px;
+        }
+
+        .confidence {
+            font-size: 18px;
+            color: #666;
+            margin-top: 15px;
+        }
+
+        .confidence-bar {
+            width: 100%;
+            height: 8px;
+            background-color: #ddd;
+            border-radius: 4px;
+            margin-top: 8px;
+            overflow: hidden;
+        }
+
+        .confidence-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4CAF50, #45a049);
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        .probabilities {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .probabilities h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+
+        .prob-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+            font-size: 12px;
+        }
+
+        .prob-digit {
+            width: 30px;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .prob-bar {
+            flex: 1;
+            height: 6px;
+            background-color: #e0e0e0;
+            border-radius: 3px;
+            margin: 0 10px;
+            overflow: hidden;
+        }
+
+        .prob-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            width: 0%;
+        }
+
+        .prob-percent {
+            width: 40px;
+            text-align: right;
+            color: #666;
+        }
+
+        .status {
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 12px;
+        }
+
+        .status.error {
+            background-color: #ffebee;
+            color: #c62828;
+        }
+
+        .status.success {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .status.loading {
+            background-color: #e3f2fd;
+            color: #1565c0;
+        }
+
+        .instructions {
+            background: #f9f9f9;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            margin-bottom: 20px;
+            font-size: 13px;
+            color: #555;
+            border-radius: 4px;
+        }
+
+        .instructions ol {
+            margin-left: 20px;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+
+            .header h1 {
+                font-size: 24px;
+            }
+
+            .digit-display {
+                font-size: 80px;
+                min-height: 100px;
+            }
+
+            #drawingCanvas {
+                max-width: 100%;
+            }
+
+            button {
+                min-width: 120px;
+                padding: 10px 20px;
+                font-size: 14px;
+            }
+        }
+
+        .error-message {
+            color: #c62828;
+            font-size: 12px;
+            margin-top: 10px;
+        }
+
+        .canvas-row {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        #processedCanvas {
+            border: 3px solid #764ba2;
+            border-radius: 10px;
+            image-rendering: pixelated;
+            background: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔢 Ziffer-Erkennung</h1>
+            <p>Deep Learning mit Künstlichen Neuronalen Netzen</p>
+        </div>
+
+        <div class="instructions">
+            <ol>
+                <li>Zeichne eine Ziffer (0-9) ins Feld unten</li>
+                <li>Klicke auf "Vorhersage machen"</li>
+                <li>Das Modell zeigt dir, welche Ziffer es erkannt hat!</li>
+            </ol>
+        </div>
+
+        <div id="statusMessage" class="status" style="display: none;"></div>
+
+        <div class="canvas-row">
+            <div class="canvas-section">
+                <label class="canvas-label">Original:</label>
+                <canvas id="drawingCanvas" width="400" height="400"></canvas>
+            </div>
+            <div class="canvas-section">
+                <label class="canvas-label">28x28 Eingabe:</label>
+                <canvas id="processedCanvas" width="280" height="280"></canvas>
+            </div>
+        </div>
+
+        <div class="button-group">
+            <button class="btn-predict" id="predictBtn" onclick="predict()">🔍 Vorhersage machen</button>
+            <button class="btn-clear" onclick="clearCanvas()">🗑️ Löschen</button>
+        </div>
+
+        <div class="result-row">
+            <div class="result-section">
+                <div class="result-label">Erkannte Ziffer:</div>
+                <div class="digit-display waiting" id="digitDisplay">?</div>
+                <div class="confidence" id="confidenceText">Sicherheit: --</div>
+                <div class="confidence-bar">
+                    <div class="confidence-bar-fill" id="confidenceBar"></div>
+                </div>
+            </div>
+
+
+            <div class="probabilities">
+                <h3>📊 Wahrscheinlichkeiten für alle Ziffern:</h3>
+                <div id="probabilitiesContainer">
+                    <!-- Wird mit JavaScript gefüllt -->
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('drawingCanvas');
+        const ctx = canvas.getContext('2d');
+        let isDrawing = false;
+        let lastX = 0;
+        let lastY = 0;
+
+        // Canvas-Größe anpassen
+        function resizeCanvas() {
+            const rect = canvas.getBoundingClientRect();
+            canvas.width = rect.width;
+            canvas.height = rect.height;
+            ctx.fillStyle = 'white';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+        }
+
+        function displayProcessedImage(imageData) {
+
+            const canvas = document.getElementById('processedCanvas');
+            const ctx = canvas.getContext('2d');
+
+            const img = new Image();
+
+            img.onload = function() {
+                ctx.clearRect(0,0,canvas.width,canvas.height);
+                ctx.drawImage(
+                    img,
+                    0,
+                    0,
+                    canvas.width,
+                    canvas.height
+                );
+            };
+
+            img.src = imageData;
+        }
+
+        // Zeichnen starten
+        canvas.addEventListener('mousedown', (e) => {
+            isDrawing = true;
+            const rect = canvas.getBoundingClientRect();
+            lastX = e.clientX - rect.left;
+            lastY = e.clientY - rect.top;
+        });
+
+        // Zeichnen
+        canvas.addEventListener('mousemove', (e) => {
+            if (!isDrawing) return;
+
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            ctx.strokeStyle = '#000';
+            ctx.lineWidth = 15;
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+            ctx.beginPath();
+            ctx.moveTo(lastX, lastY);
+            ctx.lineTo(x, y);
+            ctx.stroke();
+
+            lastX = x;
+            lastY = y;
+        });
+
+        // Zeichnen beenden
+        canvas.addEventListener('mouseup', () => {
+            isDrawing = false;
+        });
+
+        canvas.addEventListener('mouseleave', () => {
+            isDrawing = false;
+        });
+
+        // Touch-Support
+        canvas.addEventListener('touchstart', (e) => {
+            isDrawing = true;
+            const touch = e.touches[0];
+            const rect = canvas.getBoundingClientRect();
+            lastX = touch.clientX - rect.left;
+            lastY = touch.clientY - rect.top;
+        });
+
+        canvas.addEventListener('touchmove', (e) => {
+            if (!isDrawing) return;
+            e.preventDefault();
+
+            const touch = e.touches[0];
+            const rect = canvas.getBoundingClientRect();
+            const x = touch.clientX - rect.left;
+            const y = touch.clientY - rect.top;
+
+            ctx.strokeStyle = '#000';
+            ctx.lineWidth = 15;
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+            ctx.beginPath();
+            ctx.moveTo(lastX, lastY);
+            ctx.lineTo(x, y);
+            ctx.stroke();
+
+            lastX = x;
+            lastY = y;
+        });
+
+        canvas.addEventListener('touchend', () => {
+            isDrawing = false;
+        });
+
+        // Canvas löschen
+        function clearCanvas() {
+            const canvas = document.getElementById('drawingCanvas');
+            ctx.fillStyle = 'white';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            const canvas2 = document.getElementById('processedCanvas');
+            const ctx2 = canvas2.getContext('2d');
+            ctx2.fillStyle = 'white';
+            ctx2.fillRect(0, 0, canvas2.width, canvas2.height);
+            document.getElementById('digitDisplay').textContent = '?';
+            document.getElementById('digitDisplay').className = 'digit-display waiting';
+            document.getElementById('confidenceText').textContent = 'Sicherheit: --';
+            document.getElementById('confidenceBar').style.width = '0%';
+            document.getElementById('probabilitiesContainer').innerHTML = '';
+            hideStatus();
+        }
+
+        // Status anzeigen
+        function showStatus(message, type) {
+            const statusDiv = document.getElementById('statusMessage');
+            statusDiv.textContent = message;
+            statusDiv.className = `status ${type}`;
+            statusDiv.style.display = 'block';
+        }
+
+        function hideStatus() {
+            document.getElementById('statusMessage').style.display = 'none';
+        }
+
+        // Vorhersage machen
+        async function predict() {
+            const predictBtn = document.getElementById('predictBtn');
+            
+            try {
+                // Canvas zu Base64 konvertieren
+                const imageData = canvas.toDataURL('image/png');
+
+                // Loading-Status anzeigen
+                showStatus('⏳ Modell analysiert deine Ziffer...', 'loading');
+                predictBtn.disabled = true;
+
+                // API-Request senden
+                const response = await fetch('/api/predict', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ image: imageData })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    showStatus('❌ Fehler: ' + (data.error || 'Unbekannter Fehler'), 'error');
+                    document.getElementById('digitDisplay').textContent = '✗';
+                    document.getElementById('digitDisplay').className = 'digit-display waiting';
+                    return;
+                }
+
+                // Ergebnisse anzeigen
+                document.getElementById('digitDisplay').textContent = data.digit;
+                document.getElementById('digitDisplay').className = 'digit-display';
+                document.getElementById('confidenceText').textContent = 
+                    `Sicherheit: ${data.confidence.toFixed(1)}%`;
+                document.getElementById('confidenceBar').style.width = `${data.confidence}%`;
+
+                // Wahrscheinlichkeiten anzeigen
+                displayProbabilities(data.probabilities);
+                displayProcessedImage(data.processed_image);
+
+                // Erfolgs-Status anzeigen
+                showStatus(`✅ Erkannt: Ziffer ${data.digit} mit ${data.confidence.toFixed(1)}% Sicherheit`, 'success');
+
+            } catch (error) {
+                showStatus('❌ Fehler: ' + error.message, 'error');
+                document.getElementById('digitDisplay').textContent = '✗';
+                document.getElementById('digitDisplay').className = 'digit-display waiting';
+            } finally {
+                predictBtn.disabled = false;
+            }
+        }
+
+        // Wahrscheinlichkeiten anzeigen
+        function displayProbabilities(probs) {
+            const container = document.getElementById('probabilitiesContainer');
+            container.innerHTML = '';
+
+            for (let i = 0; i < 10; i++) {
+                const prob = probs[String(i)] || 0;
+                const item = document.createElement('div');
+                item.className = 'prob-item';
+                item.innerHTML = `
+                    <div class="prob-digit">${i}</div>
+                    <div class="prob-bar">
+                        <div class="prob-bar-fill" style="width: ${prob}%"></div>
+                    </div>
+                    <div class="prob-percent">${prob.toFixed(1)}%</div>
+                `;
+                container.appendChild(item);
+            }
+        }
+
+        // Initialisierung
+        window.addEventListener('load', () => {
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+        });
+    </script>
+</body>
+</html>
