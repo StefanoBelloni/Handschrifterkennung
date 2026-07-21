@@ -150,6 +150,7 @@ Ein Fenster öffnet sich, in dem Sie mit der Maus Ziffern zeichnen und das train
 - "Hands-On Machine Learning" von Aurélien Géron (Praktisch orientiert)
 - "Neural Networks from Scratch" von Harrison Kinney (Implementierung verstehen)
 - "Machine Learning mit Python: Das Praxis-Handbuch für Data Science, Predictive Analytics und Deep Learning" von Sebastian Raschka
+- [Neural networks and deep learning](http://neuralnetworksanddeeplearning.com/), volume 25. Determination press San Francisco, CA, USA, 2015.  Michael A Nielsen. 
 
 ### Online-Ressourcen
 - [Papers with Code](https://paperswithcode.com/) - State-of-the-art Modelle
@@ -192,6 +193,7 @@ Diese Materialien sind erstellt für Bildungszwecke.
 
 **Frameworks:**
 - TensorFlow/Keras: Google
+- JAX: High performance array computing
 - Jupyter: Project Jupyter
 - Python: Python Software Foundation
 
