@@ -4,10 +4,18 @@ Handschriften-Ziffer Erkennungsanwendung
 Web-basierte GUI für die Erkennung von handgeschriebenen Ziffern mit Deep Learning
 """
 
+
+
+import os
 import numpy as np
 from PIL import Image
-import tensorflow as tf
-from tensorflow import keras
+try:
+    import tensorflow as tf
+    from tensorflow import keras
+except Exception as e:
+    print("Cannot import tensorflow: using jax")
+    os.environ["KERAS_BACKEND"] = "jax"
+    import keras
 import io
 import base64
 from flask import Flask, render_template, request, jsonify

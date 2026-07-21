@@ -9,8 +9,13 @@ matplotlib>=3.4.0
 scikit-learn>=0.24.0
 
 # Deep Learning Framework
-tensorflow>=2.8.0
-keras>=2.8.0
+# For python3.14 there is no support for these:
+# tensorflow>=2.8.0
+# keras>=2.8.0
+
+keras 
+jax 
+jaxlib
 
 # Jupyter Environment
 jupyter>=1.0.0
