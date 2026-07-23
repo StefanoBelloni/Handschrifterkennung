@@ -97,7 +97,8 @@ plt.title(
 
 plt.grid()
 
-plt.show()
+plt.pause(0.3)
+plt.show(block=False)
 
 # %%
 # Trainings-Verlauf plotten
@@ -124,7 +125,8 @@ axes[1].legend()
 axes[1].grid(True, alpha=0.3)
 
 plt.tight_layout()
-plt.show()
+plt.pause(0.3)
+plt.show(block=False)
 
 # Letzte Werte anzeigen
 print(f"Finaler Training Loss: {history.history['loss'][-1]:.4f}")
@@ -140,4 +142,4 @@ model.save( "final_mnist_model.h5")
 # %%
 
 
-
+input("Press enter to continue ...")

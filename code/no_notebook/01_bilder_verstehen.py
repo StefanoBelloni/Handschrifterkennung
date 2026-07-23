@@ -37,7 +37,8 @@ plt.figure(figsize=(4, 4))
 plt.imshow(schachbrett, cmap='gray')
 plt.title('Schachbrett-Muster (4x4 Pixel)')
 plt.colorbar()
-plt.show()
+plt.pause(0.3)
+plt.show(block=False)
 
 # %% [markdown]
 # ## 1. Ein einfaches Schwarzweiß-Bild
@@ -62,7 +63,8 @@ plt.figure(figsize=(6, 4))
 plt.imshow(graustufen, cmap='gray', vmin=0, vmax=255)
 plt.title('Graustufenbild (4x4 Pixel)')
 plt.colorbar(label='Helligkeit')
-plt.show()
+plt.pause(0.3)
+plt.show(block=False)
 
 print(f"\nMinimum: {graustufen.min()} (schwarz)")
 print(f"Maximum: {graustufen.max()} (weiß)")
@@ -100,7 +102,8 @@ plt.figure(figsize=(6, 6))
 plt.imshow(rgb_bild)
 plt.title('Einfaches RGB-Bild (4x4 Pixel)')
 plt.axis('off')
-plt.show()
+plt.pause(0.3)
+plt.show(block=False)
 
 # %%
 import numpy as np
@@ -123,7 +126,8 @@ plt.imshow(rgb_bild, interpolation="nearest")
 plt.title("16×16 RGB-Bild mit fließenden Farbübergängen")
 plt.xticks([])
 plt.yticks([])
-plt.show()
+plt.pause(0.3)
+plt.show(block=False)
 
 # %% [markdown]
 # ## 4. MNIST-Daten laden und erkunden
@@ -160,7 +164,8 @@ plt.figure(figsize=(6, 6))
 plt.imshow(bild, cmap='gray')
 plt.title(f'MNIST Bild: Ziffer {label}')
 plt.colorbar(label='Helligkeit')
-plt.show()
+plt.pause(0.3)
+plt.show(block=False)
 
 # %% [markdown]
 # ## 6. Mehrere MNIST-Bilder vergleichen
@@ -180,7 +185,8 @@ for i, idx in enumerate(indices_3):
 
 plt.suptitle('Verschiedene Schreibweisen der Ziffer 3', fontsize=14)
 plt.tight_layout()
-plt.show()
+plt.pause(0.3)
+plt.show(block=False)
 
 print(f"Beobachtung: Alle sind Ziffern 3, aber die Schreibweise ist unterschiedlich!")
 
@@ -301,7 +307,8 @@ plt.ylabel("Vertikaler Schwerpunkt (y)")
 plt.title("Ziffern im Merkmalsraum: Schwerpunkt der Pixel")
 
 plt.grid(True)
-plt.show()
+plt.pause(0.3)
+plt.show(block=False)
 
 
 plt.suptitle(
@@ -310,7 +317,8 @@ plt.suptitle(
 )
 
 plt.tight_layout()
-plt.show()
+plt.pause(0.3)
+plt.show(block=False)
 
 # %%
 # -------------------------------------------------
@@ -361,7 +369,8 @@ plt.title(
 plt.grid(True)
 plt.axis("equal")
 
-plt.show()
+plt.pause(0.3)
+plt.show(block=False)
 
 # %% [markdown]
 # ## 8. Durchschnittliche Ziffern visualisieren
@@ -396,7 +405,8 @@ for digit in range(10):
     ax.axis("off")
 
 plt.suptitle("Average digit")
-plt.show()
+plt.pause(0.3)
+plt.show(block=False)
 
 # %%
 def predict(image, prototypes):
@@ -419,7 +429,8 @@ def test_number(idx):
     plt.imshow(256 - x_test[idx], cmap="gray")
     plt.title(f"Prediction: {prediction}   True: {y_test[idx]}")
     plt.axis("off")
-    plt.show()
+    plt.pause(0.3)
+    plt.show(block=False)
     
     print(probs)
     plt.figure(figsize=(10, 5))
@@ -428,7 +439,8 @@ def test_number(idx):
     plt.ylabel('Probability')
     plt.title('Prediction Probability')
     plt.xticks(range(10))
-    plt.show()
+    plt.pause(0.3)
+    plt.show(block=False)
 
 # %%
 test_number(1)
@@ -454,7 +466,8 @@ cm = confusion_matrix(y_test, predictions)
 
 disp = ConfusionMatrixDisplay(cm)
 disp.plot(cmap="Blues")
-plt.show()
+plt.pause(0.3)
+plt.show(block=False)
 
 # %% [markdown]
 # ## Ein lernender Klassifikator: k-Nächste-Nachbarn
@@ -491,7 +504,8 @@ def test_number_kNN(idx):
         plt.xlabel("d = " + str(int(distances[0][i])))
     
     plt.tight_layout()
-    plt.show()
+    plt.pause(0.3)
+    plt.show(block=False)
 
 # %%
 test_number_kNN(0)
@@ -513,9 +527,11 @@ def nkk_confusionmatrix():
 
     disp = ConfusionMatrixDisplay(cm)
     disp.plot(cmap="Blues")
-    plt.show()
+    plt.pause(0.3)
+    plt.show(block=False)
 
 # %%
 # nkk_confusionmatrix()
 
 
+input("Press enter to continue ...")

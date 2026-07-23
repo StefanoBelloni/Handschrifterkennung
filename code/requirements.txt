@@ -18,9 +18,9 @@ jax
 jaxlib
 
 # Jupyter Environment
-jupyter>=1.0.0
-notebook>=6.4.0
-ipython>=7.0.0
+# jupyter>=1.0.0
+# notebook>=6.4.0
+# ipython>=7.0.0
 
 # Image Processing
 pillow>=8.3.0
@@ -30,7 +30,7 @@ flask>=2.0.0
 werkzeug>=2.0.0
 
 # Utilities
-jupyter-contrib-nbextensions>=0.5.1
+# jupyter-contrib-nbextensions>=0.5.1
 
 # Optional: For GPU support (uncomment if you have CUDA)
 # tensorflow[and-cuda]>=2.8.0

@@ -70,7 +70,8 @@ plt.title("XOR Problem")
 plt.grid()
 plt.legend()
 
-plt.show()
+plt.pause(0.3)
+plt.show(block=False)
 
 # %%
 from sklearn.linear_model import Perceptron
@@ -144,7 +145,8 @@ def plot_boundary(model):
     plt.legend()
     plt.grid()
 
-    plt.show()
+    plt.pause(0.3)
+    plt.show(block=False)
 
 
 plot_boundary(model)
@@ -224,7 +226,8 @@ plt.title(
 
 plt.grid()
 
-plt.show()
+plt.pause(0.3)
+plt.show(block=False)
 
 # %% [markdown]
 # ### Entscheidungsfläche des neuronalen Netzes
@@ -277,7 +280,8 @@ def plot_nn_boundary(network):
     plt.legend()
     plt.grid()
 
-    plt.show()
+    plt.pause(0.3)
+    plt.show(block=False)
 
 
 plot_nn_boundary(network)
@@ -323,4 +327,4 @@ plot_nn_boundary(network)
 # 
 # Dadurch können neuronale Netze komplizierte Muster wie Handschriften, Gesichter oder Sprache erkennen.
 
-
+input("Press enter to continue ...")

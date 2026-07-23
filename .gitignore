@@ -7,3 +7,5 @@ code/zibaldone/ADVANCED_VISUALIZATIONS_GUIDE.md
 code/zibaldone/VISUALIZATIONS_GUIDE.md
 code/zibaldone/visualizations_neural_network.py
 code/no_notebook/mnist_model.h5
+code/no_notebook/final_mnist_model.h5
+venv/

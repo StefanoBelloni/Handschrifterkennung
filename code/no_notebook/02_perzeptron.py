@@ -48,7 +48,8 @@ plt.title("Ein einfaches Klassifikationsproblem")
 plt.legend()
 plt.grid()
 
-plt.show()
+plt.pause(0.3)
+plt.show(block=False)
 
 # %% [markdown]
 # ### Perzeptron implementieren
@@ -124,7 +125,8 @@ plt.title("Verschiedene Aktivierungsfunktionen")
 plt.grid()
 plt.legend()
 
-plt.show()
+plt.pause(0.3)
+plt.show(block=False)
 
 # %%
 def predict(X, weights, bias, activation=step_activation):
@@ -246,7 +248,8 @@ plt.ylabel("Fehler")
 plt.title("Fehler während des Trainings")
 
 plt.grid()
-plt.show()
+plt.pause(0.3)
+plt.show(block=False)
 
 # %%
 def plot_decision_boundary(X, y, weights, bias):
@@ -293,7 +296,8 @@ def plot_decision_boundary(X, y, weights, bias):
         "Gelernte Entscheidungsgrenze"
     )
 
-    plt.show()
+    plt.pause(0.3)
+    plt.show(block=False)
 
 
 plot_decision_boundary(
@@ -343,7 +347,8 @@ plt.title(
 plt.legend()
 plt.grid()
 
-plt.show()
+plt.pause(0.3)
+plt.show(block=False)
 
 # %% [markdown]
 # ### Gradient sichtbar machen
@@ -394,7 +399,8 @@ plt.title(
 
 plt.grid()
 
-plt.show()
+plt.pause(0.3)
+plt.show(block=False)
 
 # %% [markdown]
 # ### Ein einzelner Gradient-Schritt
@@ -425,3 +431,4 @@ print("Neues Gewicht:")
 print(w_new)
 
 
+input("Press enter to continue ...")

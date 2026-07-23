@@ -234,7 +234,9 @@ axes[1].legend()
 axes[1].grid(True, alpha=0.3)
 
 plt.tight_layout()
-plt.show()
+plt.pause(0.3)
+plt.pause(0.3)
+plt.show(block=False)
 
 # Letzte Werte anzeigen
 print(f"Finaler Training Loss: {history.history['loss'][-1]:.4f}")
@@ -286,7 +288,8 @@ for i, idx in enumerate(indices):
 
 plt.suptitle('10 Zufällige Vorhersagen auf Testset', fontsize=14)
 plt.tight_layout()
-plt.show()
+plt.pause(0.3)
+plt.show(block=False)
 
 # %% [markdown]
 # ## 8. Modell speichern
@@ -303,3 +306,5 @@ loaded_test_acc = loaded_model.evaluate(x_test_flat, y_test_encoded, verbose=0)[
 print(f"✓ Modell geladen und getestet: {loaded_test_acc:.4f} ({loaded_test_acc*100:.2f}%)")
 
 
+
+input("Press enter to continue ...")
